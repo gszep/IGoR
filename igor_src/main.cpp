@@ -1902,7 +1902,9 @@ int main(int argc , char* argv[]){
 			}
 			unordered_map<int,pair<string,unordered_map<Gene_class,vector<Alignment_data>>>> sorted_alignments;
 			try{
-				sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + v_align_filename, V_gene , 55 , false , indexed_seqlist  );
+        // FIXME: Allow insertions and deletions temporatly
+				//sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + v_align_filename, V_gene , 55 , false , indexed_seqlist  );
+				sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + v_align_filename, V_gene , 55 , true , indexed_seqlist  );
 			}
 			catch(exception& e){
 				return terminate_IGoR_with_error_message("Exception caught while reading V alignments before inference/evaluation. Make sure alignments were carried previously using \"-align --V\" or \"-align --all\" with similar path parameters (working directory, batchname, ...)",e);
@@ -1910,18 +1912,73 @@ int main(int argc , char* argv[]){
 
 			if(has_D){
 				try{
-					sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + d_align_filename, D_gene , 35 , false , indexed_seqlist , sorted_alignments);
+          // FIXME: Allow insertions and deletions temporatly
+					//sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + d_align_filename, D_gene , 35 , false , indexed_seqlist , sorted_alignments);
+					sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + d_align_filename, D_gene , 35 , true , indexed_seqlist , sorted_alignments);
 				}
 				catch(exception& e){
 					return terminate_IGoR_with_error_message("Exception caught while reading D alignments before inference/evaluation. Make sure alignments were carried previously using \"-align --D\" or \"-align --all\" with similar path parameters (working directory, batchname, ...)",e);
 				}
 			}
 			try{
-				sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + j_align_filename, J_gene , 10 , false , indexed_seqlist , sorted_alignments);
+        // FIXME: Allow insertions and deletions temporatly
+				//sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + j_align_filename, J_gene , 10 , false , indexed_seqlist , sorted_alignments);
+				sorted_alignments = read_alignments_seq_csv_score_range(cl_path + "aligns/" +  batchname + j_align_filename, J_gene , 10 , true , indexed_seqlist , sorted_alignments);
 			}
 			catch(exception& e){
 				return terminate_IGoR_with_error_message("Exception caught while reading J alignments before inference/evaluation. Make sure alignments were carried previously using \"-align --J\" or \"-align --all\" with similar path parameters (working directory, batchname, ...)",e);
 			}
+
+      // TODO: Filtrate the sequence with where the highest alignment score has an insertion or deletion
+      std::cout << "************************************** removing ..." <<std::endl;
+      int initial_sorted_alignments_size = sorted_alignments.size();
+			std::cout << "ORIGINAL NUMBER OF SEQUENCES : " << initial_sorted_alignments_size << std::endl;
+			for (auto it_sort_alig = sorted_alignments.begin(); it_sort_alig != sorted_alignments.end(); ++it_sort_alig ){
+				auto umapGene_classVecAlignment_data = (it_sort_alig->second).second;
+				
+				if ( umapGene_classVecAlignment_data.count(V_gene) > 0 ){
+					std::cout << it_sort_alig->first << ", size: " << umapGene_classVecAlignment_data[V_gene].size() << ", count : "<< umapGene_classVecAlignment_data.count(V_gene) << std::endl;
+
+					if (umapGene_classVecAlignment_data[V_gene].size()  > 0 ){
+						bool b_insEmpty  =  umapGene_classVecAlignment_data[V_gene][0].insertions.empty();
+						bool b_delsEmpty =  umapGene_classVecAlignment_data[V_gene][0].deletions.empty();
+
+
+						if ( (not b_insEmpty) or (not b_delsEmpty) ){
+							std::cout << "TO BE ERASE : " << it_sort_alig->first << " V_gene has an insertion or deletions as highest alignment" <<std::endl;
+							sorted_alignments.erase(it_sort_alig);
+							continue;
+						}
+					}
+				}
+				std::cout << "final V_gene per seq " <<std::endl;
+				
+				if ( umapGene_classVecAlignment_data.count(D_gene) > 0 ){
+					bool b_insEmpty  =  umapGene_classVecAlignment_data[D_gene][0].insertions.empty();
+					bool b_delsEmpty =  umapGene_classVecAlignment_data[D_gene][0].deletions.empty();
+					if (umapGene_classVecAlignment_data[D_gene].size()  > 0 ){
+					    if ( (not b_insEmpty) or (not b_delsEmpty) ){
+						    std::cout << "TO BE ERASE : " << it_sort_alig->first << " D_gene has an insertion or deletions as highest alignment" <<std::endl;
+						    sorted_alignments.erase(it_sort_alig);
+						    continue;
+					    }
+					}
+				}
+				
+				if ( umapGene_classVecAlignment_data.count(J_gene) > 0 ){
+					bool b_insEmpty  =  umapGene_classVecAlignment_data[J_gene][0].insertions.empty();
+					bool b_delsEmpty =  umapGene_classVecAlignment_data[J_gene][0].deletions.empty();
+					if (umapGene_classVecAlignment_data[J_gene].size()  > 0 ){
+					    if ( (not b_insEmpty) or (not b_delsEmpty) ){
+						    std::cout << "TO BE ERASE : " << it_sort_alig->first << " J_gene has an insertion or deletions as highest alignment" <<std::endl;
+						    sorted_alignments.erase(it_sort_alig);
+						    continue;
+					    }
+					}
+				}
+			}
+			std::cout << "NUMBER OF SEQUENCES DISCARTED : " << initial_sorted_alignments_size - sorted_alignments.size()<<std::endl;
+      // TODO: Create a function to remove the insertions and deletions.
 
 			vector<tuple<int,string,unordered_map<Gene_class,vector<Alignment_data>>>> sorted_alignments_vec = map2vect(sorted_alignments);
 
