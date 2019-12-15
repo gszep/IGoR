@@ -7,7 +7,8 @@ SUBDIRS = libs igor_src
 #Since automake cannot copy directly directories another workaround:
 
 demodir = $(pkgdatadir)/demo
-demo_DATA = demo/genomicVs_with_primers.fasta demo/genomicDs.fasta demo/genomicJs_all_curated.fasta demo/murugan_naive1_noncoding_demo_seqs.txt
+#demo_DATA = demo/genomicVs_with_primers.fasta demo/genomicDs.fasta demo/genomicJs_all_curated.fasta demo/murugan_naive1_noncoding_demo_seqs.txt
+demo_DATA = $(demodir)/genomicVs_with_primers.fasta $(demodir)/genomicDs.fasta $(demodir)/genomicJs_all_curated.fasta $(demodir)/murugan_naive1_noncoding_demo_seqs.txt
 
 #Install the generated man pages
 man_MANS = igor.1
