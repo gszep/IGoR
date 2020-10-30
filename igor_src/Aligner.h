@@ -161,7 +161,7 @@ std::unordered_map<std::string,size_t> read_gene_anchors_csv(std::string,std::st
 std::unordered_map<std::string,std::pair<int,int>> read_template_specific_offset_csv(std::string,std::string separator= ";");
 void write_indexed_seq_csv(std::string , std::vector<std::pair<const int,const std::string>>);
 Int_Str nt2int(std::string);
-bool comp_nt_int(const int& , const int&);
+// bool comp_nt_int(const int& , const int&);
 std::list<Int_nt> get_ambiguous_nt_list(const Int_nt&);
 inline void write_single_seq_alignment( std::ofstream& , int , std::forward_list<Alignment_data> );
 //Compare alignments (sort by score)
@@ -180,6 +180,132 @@ std::forward_list<Alignment_data> extract_best_gene_alignments(const std::forwar
 	}
 	*/
 
+/**
+ * This function compares nucleotides and output a boolean if they do not necessarily imply an error (ambiguous nucleotides are thus treated in a loose sense).
+ */
+inline bool comp_nt_int(const int& nt_1 , const int& nt_2){
+	if(nt_1 != nt_2){
+		if( (nt_1<4) & (nt_2<4)){
+			return false;
+		}
+		else{
+			switch(nt_1){
+					case int_A:
+						switch(nt_2){
+							case int_R: case int_W: case int_M: case int_D: case int_H: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_C:
+						switch(nt_2){
+							case int_Y: case int_S: case int_M: case int_B: case int_H: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_G:
+						switch(nt_2){
+							case int_R: case int_S: case int_K: case int_B: case int_D: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_T:
+						switch(nt_2){
+							case int_Y: case int_W: case int_K: case int_B: case int_D: case int_H: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_R:
+						switch(nt_2){
+							case int_A: case int_G:
+							case int_S: case int_W: case int_K: case int_M:
+							case int_B: case int_D: case int_H: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_Y:
+						switch(nt_2){
+							case int_C: case int_T:
+							case int_S: case int_W: case int_K: case int_M:
+							case int_B: case int_D: case int_H: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_K:
+						switch(nt_2){
+							case int_G: case int_T:
+							case int_R: case int_Y: case int_S: case int_W:
+							case int_B: case int_D: case int_H: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_M:
+						switch(nt_2){
+							case int_A: case int_C:
+							case int_R: case int_Y: case int_S: case int_W:
+							case int_B: case int_D: case int_H: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_S:
+						switch(nt_2){
+							case int_G: case int_C:
+							case int_R: case int_Y: case int_K: case int_M:
+							case int_B: case int_D: case int_H: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_W:
+						switch(nt_2){
+							case int_A: case int_T:
+							case int_R: case int_Y: case int_K: case int_M:
+							case int_B: case int_D: case int_H: case int_V: case int_N:
+								return true;
+								break;
+						}
+						break;
+					case int_B:
+						if(nt_2 != int_A){ //Of course this is in the hope that nt_2 is in the correct range of int
+							return true;
+						}
+						break;
+					case int_D:
+						if(nt_2 != int_C){ //Of course this is in the hope that nt_2 is in the correct range of int
+							return true;
+						}
+						break;
+					case int_H:
+						if(nt_2 != int_G){ //Of course this is in the hope that nt_2 is in the correct range of int
+							return true;
+						}
+						break;
+					case int_V:
+						if(nt_2 != int_T){ //Of course this is in the hope that nt_2 is in the correct range of int
+							return true;
+						}
+						break;
+					case int_N:
+						return true;
+						break;
+					default:
+						throw std::runtime_error("Unknown nucleotide index: "+std::to_string(nt_1) + "in comp_nt_int()");
+
+			}
+			return false;
+		}
+	}
+	else{
+		return true;
+	}
+}
 
 
 #endif /* ALIGNER_H_ */
