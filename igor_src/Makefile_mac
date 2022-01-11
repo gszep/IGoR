@@ -1,0 +1,59 @@
+SOURCES = Aligner.cpp Aligner.h Bestscenarioscounter.cpp Bestscenarioscounter.h CDR3SeqData.h CDR3SeqData.cpp Counter.cpp Counter.h Coverageerrcounter.cpp Coverageerrcounter.h Deletion.cpp Deletion.h Dinuclmarkov.cpp Dinuclmarkov.h Errorscounter.cpp Errorscounter.h Errorrate.cpp Errorrate.h ExtractFeatures.h ExtractFeatures.cpp Genechoice.cpp Genechoice.h GenModel.cpp GenModel.h HypermutationfullNmererrorrate.cpp HypermutationfullNmererrorrate.h Hypermutationglobalerrorrate.cpp Hypermutationglobalerrorrate.h Insertion.cpp Insertion.h IntStr.cpp IntStr.h Model_marginals.cpp Model_marginals.h Model_Parms.cpp Model_Parms.h Pgencounter.cpp Pgencounter.h Rec_Event.cpp Rec_Event.h Singleerrorrate.cpp Singleerrorrate.h Utils.cpp Utils.h
+
+igor_LDADD = ../libs/gsl_sub/libgsl_sub.la ../libs/jemalloc/lib/libjemalloc.a -lpthread -ldl
+igor_CXXFLAGS = -I$(srcdir)/../libs/jemalloc/include/jemalloc -I$(srcdir)/../libs/gsl_sub $(OPENMP_CXXFLAGS) -DIGOR_DATA_DIR="."
+
+CXX = g++-7
+all:Aligner.o Bestscenarioscounter.o CDR3SeqData.o Counter.o Coverageerrcounter.o Deletion.o Dinuclmarkov.o Errorrate.o Errorscounter.o ExtractFeatures.o GenModel.o Genechoice.o HypermutationfullNmererrorrate.o Hypermutationglobalerrorrate.o Insertion.o IntStr.o Model_Parms.o Model_marginals.o Pgencounter.o Rec_Event.o Singleerrorrate.o Utils.o main.o testo.o 
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(igor_CXXFLAGS) $(CXXFLAGS)
+
+
+Aligner.o:Aligner.cpp Aligner.h
+	g++-7 $(igor_LDADD) -c Aligner.cpp
+Bestscenarioscounter.o:Bestscenarioscounter.cpp Bestscenarioscounter.h Genechoice.o Deletion.o Insertion.o Counter.o
+	g++-7 -c $(igor_CXXFLAGS) Bestscenarioscounter.cpp
+CDR3SeqData.o:CDR3SeqData.cpp CDR3SeqData.h
+	g++-7 $(igor_LDADD) -c CDR3SeqData.cpp
+Counter.o:Counter.cpp Counter.h Model_Parms.o Model_marginals.o IntStr.o Utils.o
+	g++-7 $(igor_LDADD) -c $(igor_CXXFLAGS) Counter.cpp
+Coverageerrcounter.o:Coverageerrcounter.cpp Coverageerrcounter.h Counter.o
+	g++-7  -c $(igor_CXXFLAGS) Coverageerrcounter.cpp
+Deletion.o:Deletion.cpp Deletion.h Rec_Event.o Utils.o Errorrate.o
+	g++-7  -c $(igor_CXXFLAGS) Deletion.cpp
+Dinuclmarkov.o:Dinuclmarkov.cpp Dinuclmarkov.h Rec_Event.o Utils.o Errorrate.o
+	g++-7  -c $(igor_CXXFLAGS) Dinuclmarkov.cpp
+Errorrate.o:Errorrate.cpp Errorrate.h Utils.o IntStr.o
+	g++-7  -c $(igor_CXXFLAGS) Errorrate.cpp
+Errorscounter.o:Errorscounter.cpp Errorscounter.h Counter.o
+	g++-7  -c $(igor_CXXFLAGS) Errorscounter.cpp
+ExtractFeatures.o:ExtractFeatures.cpp ExtractFeatures.h CDR3SeqData.o Aligner.o Utils.o
+	g++-7  -c $(igor_CXXFLAGS) ExtractFeatures.cpp
+GenModel.o:GenModel.cpp GenModel.h Model_Parms.o Rec_Event.o Counter.o Model_marginals.o Errorrate.o 
+	g++-7  -c $(igor_CXXFLAGS) GenModel.cpp
+Genechoice.o:Genechoice.cpp Genechoice.h Rec_Event.o Errorrate.o
+	g++-7  -c $(igor_CXXFLAGS) Genechoice.cpp
+HypermutationfullNmererrorrate.o:HypermutationfullNmererrorrate.cpp HypermutationfullNmererrorrate.h Errorrate.o Genechoice.o Deletion.o
+	g++-7 -v  -c $(igor_CXXFLAGS) $(igor_LDADD) HypermutationfullNmererrorrate.cpp
+Hypermutationglobalerrorrate.o:Hypermutationglobalerrorrate.cpp Hypermutationglobalerrorrate.h Errorrate.o Genechoice.o Deletion.o
+	g++-7 -v $(igor_LDADD) -c $(igor_CXXFLAGS) Hypermutationglobalerrorrate.cpp
+Insertion.o:Insertion.cpp Insertion.h Rec_Event.o Utils.o Errorrate.o
+	g++-7  -c $(igor_CXXFLAGS) Insertion.cpp
+IntStr.o:IntStr.cpp IntStr.h
+	g++-7  -c IntStr.cpp
+Model_Parms.o:Model_Parms.cpp Model_Parms.h Errorrate.o Insertion.o Deletion.o Genechoice.o Singleerrorrate.o Dinuclmarkov.o Hypermutationglobalerrorrate.o HypermutationfullNmererrorrate.o
+	g++-7  -c $(igor_CXXFLAGS) Model_Parms.cpp
+Model_marginals.o:Model_marginals.cpp Model_marginals.h Model_Parms.o Rec_Event.o
+	g++-7  -c Model_marginals.cpp
+Pgencounter.o:Pgencounter.cpp Pgencounter.h Counter.o
+	g++-7  -c Pgencounter.cpp
+Rec_Event.o:Rec_Event.cpp Rec_Event.h Aligner.o Errorrate.o IntStr.o Utils.o
+	g++-7 -v $(igor_LDADD) -c $(igor_CXXFLAGS) Rec_Event.cpp
+Singleerrorrate.o:Singleerrorrate.cpp Singleerrorrate.h Errorrate.o Utils.o
+	g++-7  -c Singleerrorrate.cpp
+Utils.o:Utils.cpp Utils.h
+	g++-7  -c Utils.cpp
+main.o:main.cpp
+	g++-7  -c main.cpp
+testo.o:testo.cpp testo.h
+	g++-7  -c testo.cpp
+
