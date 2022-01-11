@@ -1,12 +1,18 @@
 SOURCES = Aligner.cpp Aligner.h Bestscenarioscounter.cpp Bestscenarioscounter.h CDR3SeqData.h CDR3SeqData.cpp Counter.cpp Counter.h Coverageerrcounter.cpp Coverageerrcounter.h Deletion.cpp Deletion.h Dinuclmarkov.cpp Dinuclmarkov.h Errorscounter.cpp Errorscounter.h Errorrate.cpp Errorrate.h ExtractFeatures.h ExtractFeatures.cpp Genechoice.cpp Genechoice.h GenModel.cpp GenModel.h HypermutationfullNmererrorrate.cpp HypermutationfullNmererrorrate.h Hypermutationglobalerrorrate.cpp Hypermutationglobalerrorrate.h Insertion.cpp Insertion.h IntStr.cpp IntStr.h Model_marginals.cpp Model_marginals.h Model_Parms.cpp Model_Parms.h Pgencounter.cpp Pgencounter.h Rec_Event.cpp Rec_Event.h Singleerrorrate.cpp Singleerrorrate.h Utils.cpp Utils.h
 
+srcdir = .
 igor_LDADD = ../libs/gsl_sub/libgsl_sub.la ../libs/jemalloc/lib/libjemalloc.a -lpthread -ldl
-igor_CXXFLAGS = -I$(srcdir)/../libs/jemalloc/include/jemalloc -I$(srcdir)/../libs/gsl_sub $(OPENMP_CXXFLAGS) -DIGOR_DATA_DIR="."
+igor_CXXFLAGS = -I$(srcdir)/../libs/jemalloc/include/jemalloc -I$(srcdir)/../libs/gsl_sub $(OPENMP_CXXFLAGS)
+# -D IGOR_DATA_DIR="."
 
 CXX = g++-7
-all:Aligner.o Bestscenarioscounter.o CDR3SeqData.o Counter.o Coverageerrcounter.o Deletion.o Dinuclmarkov.o Errorrate.o Errorscounter.o ExtractFeatures.o GenModel.o Genechoice.o HypermutationfullNmererrorrate.o Hypermutationglobalerrorrate.o Insertion.o IntStr.o Model_Parms.o Model_marginals.o Pgencounter.o Rec_Event.o Singleerrorrate.o Utils.o main.o testo.o 
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(igor_CXXFLAGS) $(CXXFLAGS)
+O_FILES = Aligner.o Bestscenarioscounter.o CDR3SeqData.o Counter.o Coverageerrcounter.o Deletion.o Dinuclmarkov.o Errorrate.o Errorscounter.o ExtractFeatures.o GenModel.o Genechoice.o HypermutationfullNmererrorrate.o Hypermutationglobalerrorrate.o Insertion.o IntStr.o Model_Parms.o Model_marginals.o Pgencounter.o Rec_Event.o Singleerrorrate.o Utils.o
 
+all:$(O_FILES) main.o
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(igor_CXXFLAGS) $(CXXFLAGS) main.o -o igor
+
+main.o:main.cpp
+	g++-7 $(igor_CXXFLAGS) $(igor_LDADD) -c main.cpp
 
 Aligner.o:Aligner.cpp Aligner.h
 	g++-7 $(igor_LDADD) -c Aligner.cpp
@@ -57,3 +63,5 @@ main.o:main.cpp
 testo.o:testo.cpp testo.h
 	g++-7  -c testo.cpp
 
+clean:
+	rm $(O_FILES)
