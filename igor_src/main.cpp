@@ -48,7 +48,6 @@
 #include <string>
 #include "CDR3SeqData.h"
 #include "ExtractFeatures.h"
-#define IGOR_DATA_DIR "."
 
 using namespace std;
 
