@@ -41,7 +41,6 @@ M94081|TRAJ32*01|Homo sapiens|F|J-REGION|49581..49646|66 nt|3| | | | |66+0=66| |
 IMGT000024|TRAJ32*02|Homo sapiens|F|J-REGION|897438..897503|66 nt|3| | | | |66+0=66| | |;32;F
 M94081|TRAJ33*01|Homo sapiens|F|J-REGION|48843..48899|57 nt|3| | | | |57+0=57| | |;23;F
 M35622|TRAJ34*01|Homo sapiens|F|J-REGION|30..87|58 nt|1| | | | |58+0=58| | |;24;F
-M94081|TRAJ35*01|Homo sapiens|F|J-REGION|            |     | | | | | |       | | |;25;F
 M94081|TRAJ36*01|Homo sapiens|F|J-REGION|45353..45411|59 nt|2| | | | |59+0=59| | |;25;F
 M94081|TRAJ37*01|Homo sapiens|F|J-REGION|43993..44054|62 nt|2| | | | |62+0=62| | |;28;F
 IMGT000024|TRAJ37*02|Homo sapiens|F|J-REGION|891847..891908|62 nt|2| | | | |62+0=62| | |;28;F
@@ -63,7 +62,6 @@ M94081|TRAJ51*01|Homo sapiens|P|J-REGION|27429..27491|63 nt|3| | | | |63+0=63| |
 M94081|TRAJ52*01|Homo sapiens|F|J-REGION|26474..26542|69 nt|3| | | | |69+0=69| | |;35;F
 M94081|TRAJ53*01|Homo sapiens|F|J-REGION|23251..23316|66 nt|3| | | | |66+0=66| | |;32;F
 M94081|TRAJ54*01|Homo sapiens|F|J-REGION|22534..22593|60 nt|3| | | | |60+0=60| | |;26;F
-M94081|TRAJ55*01|Homo sapiens|P|J-REGION|            |     | | | | | |       | | |;23;P
 M94081|TRAJ56*01|Homo sapiens|F|J-REGION|19768..19829|62 nt|2| | | | |62+0=62| | |;28;F
 M94081|TRAJ57*01|Homo sapiens|F|J-REGION|19119..19181|63 nt|3| | | | |63+0=63| | |;29;F
 M94081|TRAJ58*01|Homo sapiens|ORF|J-REGION|17954..18016|63 nt|3| | | | |63+0=63| | |;29;ORF
